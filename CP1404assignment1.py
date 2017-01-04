@@ -1,4 +1,5 @@
 import sys
+import csv
 
 def getInputString(question):
 	result = input(question)
@@ -23,6 +24,20 @@ def getInputInt(question):
 				print("Number must be >= 0")
 				continue
 
+#   pseudo code for loadBook
+#	books = empty list
+#	load csv file with csv reader into f_csv
+#	for row in f_csv
+#		add row into books
+
+def loadBook():
+	books = []
+	with open('books.csv') as f:
+		f_csv = csv.reader(f)
+		for row in f_csv:
+			books.append(row)
+	print (str(len(books)) + " books load from books.csv")
+	return books
 
 def addBook():
 	title = getInputString("Title:")
@@ -34,8 +49,9 @@ def addBook():
 
 
 def main():
-	newBook = addBook()
-	print(newBook)
+	bookList = loadBook()
+	bookList.append(addBook())
+	print(bookList)
 
 
 	
