@@ -46,12 +46,36 @@ def addBook():
 	print (title + " by " + author + ", (" + str(page) + " pages) added to reading list")
 	return [title, author, page, "r"]
 
+def displayList(bookList, status):
+	chosenList = []
+	totalPage = 0
+	if status == "r":
+		print("Required books:")
+	elif status == "c":
+		print("Completed books:")
+
+	for index in range(len(bookList)):
+		book = bookList[index]
+		if book[3] == status:
+			chosenList.append(index)
+
+	if len(chosenList) == 0:
+		print("No books\n");
+	else:
+		for n in chosenList:	
+			printBook(n, bookList[n])
+			totalPage += int(bookList[n][2])
+		print("Total pages for " + str(len(chosenList)) + " books: " + str(totalPage))
+
+
+def printBook(index, book):
+	print (str(index) + ". " + '{: <40}'.format(book[0]) + " by " + '{: <20}'.format(book[1]) + '{: >4}'.format(book[2]) + " pages")
 
 
 def main():
 	bookList = loadBook()
-	bookList.append(addBook())
-	print(bookList)
+	displayList(bookList, 'r')
+	displayList(bookList, 'c')
 
 
 	
