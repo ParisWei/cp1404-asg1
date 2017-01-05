@@ -46,18 +46,21 @@ def addBook():
 	print (title + " by " + author + ", (" + str(page) + " pages) added to reading list")
 	return [title, author, page, "r"]
 
-def displayList(bookList, status):
+def choseBookByStatus(bookList, status):
 	chosenList = []
+	for index in range(len(bookList)):
+		book = bookList[index]
+		if book[3] == status:
+			chosenList.append(index)
+	return chosenList
+
+def displayList(bookList, status):
+	chosenList = choseBookByStatus(bookList, status)
 	totalPage = 0
 	if status == "r":
 		print("Required books:")
 	elif status == "c":
 		print("Completed books:")
-
-	for index in range(len(bookList)):
-		book = bookList[index]
-		if book[3] == status:
-			chosenList.append(index)
 
 	if len(chosenList) == 0:
 		print("No books\n");
@@ -72,10 +75,39 @@ def printBook(index, book):
 	print (str(index) + ". " + '{: <40}'.format(book[0]) + " by " + '{: <20}'.format(book[1]) + '{: >4}'.format(book[2]) + " pages")
 
 
+def markBook(bookList):
+	print("mark book here")
+			
+def exit(bookList):
+	print("exit")
+
+
 def main():
+	print ("Reading List 1.0 - by %s" % "Wei Siyuan")
 	bookList = loadBook()
-	displayList(bookList, 'r')
-	displayList(bookList, 'c')
+	menu = """Menu:
+R - List required books 
+C - List completed books
+A - Add new book
+M - Mark a book as completed
+Q - Quit
+"""
+
+	choice = input(menu).upper()
+	while (choice  != "Q"):
+		if choice == "R":
+			displayList(bookList, "r")
+		elif choice == "C":
+			displayList(bookList, "c")
+		elif choice == "A":
+			bookList.append(addBook())
+		elif choice == "M":
+			markBook(bookList)
+		else:
+			print("Invalid menu choice.")
+		choice = input(menu).upper()
+	else:
+		exit(bookList)
 
 
 	
