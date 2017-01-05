@@ -1,6 +1,7 @@
 import sys
 import csv
 
+#validate string input
 def getInputString(question):
 	result = input(question)
 	while(len(result) == 0):
@@ -9,6 +10,7 @@ def getInputString(question):
 	else:
 		return result
 
+#validate integer input
 def getInputInt(question):
 	num = ""
 	while True:
@@ -39,13 +41,15 @@ def loadBook():
 	print (str(len(books)) + " books load from books.csv")
 	return books
 
+#add a book to book list
 def addBook():
-	title = getInputString("Title:")
-	author = getInputString("Author:")
-	page = getInputInt("Pages:")
+	title = getInputString("Title: ")
+	author = getInputString("Author: ")
+	page = getInputInt("Pages: ")
 	print (title + " by " + author + ", (" + str(page) + " pages) added to reading list")
 	return [title, author, page, "r"]
 
+#go through book list, get the indexes of books with certain status
 def choseBookByStatus(bookList, status):
 	chosenList = []
 	for index in range(len(bookList)):
@@ -54,6 +58,7 @@ def choseBookByStatus(bookList, status):
 			chosenList.append(index)
 	return chosenList
 
+#display books with certain status
 def displayList(bookList, status):
 	chosenList = choseBookByStatus(bookList, status)
 	totalPage = 0
@@ -63,7 +68,7 @@ def displayList(bookList, status):
 		print("Completed books:")
 
 	if len(chosenList) == 0:
-		print("No books\n");
+		print("No books");
 	else:
 		for n in chosenList:	
 			printBook(n, bookList[n])
@@ -71,17 +76,50 @@ def displayList(bookList, status):
 		print("Total pages for " + str(len(chosenList)) + " books: " + str(totalPage))
 
 
+#display one single book
 def printBook(index, book):
 	print (str(index) + ". " + '{: <40}'.format(book[0]) + " by " + '{: <20}'.format(book[1]) + '{: >4}'.format(book[2]) + " pages")
 
 
+#   pseudo code for markBook
+#	requiredList = the number list of required books
+#	if requiredList is empty
+#		print no required books message
+#	else
+#		display required list
+#		input = ask for the number of choice
+#		if input is beyond the size of book list
+#			print no such book message
+#		elif input is in requiredList
+#			mark the corresponding book as completed
+#			print mark completed message
+#		else
+#			print this book already marked message
+
 def markBook(bookList):
-	print("mark book here")
-			
+	requiredList = choseBookByStatus(bookList, 'r')
+	if len(requiredList) == 0:
+		print("No required books")
+	else:
+		displayList(bookList, 'r')
+		choice = getInputInt("Enter the number of a book to mark as completed\n")
+		if choice >= len(bookList):
+			print("There is no such book in list")
+		elif choice in requiredList:
+			bookList[choice][3] = 'c'
+			print(bookList[choice][0] + " by " + bookList[choice][1] + "marked as completed")
+		else:
+			print("That book is already completed")
+
+#write back the book list to csv and show exit message			
 def exit(bookList):
-	print("exit")
+	with open('books.csv','w') as f:
+		f_csv = csv.writer(f)
+		f_csv.writerows(bookList)
+	print(str(len(bookList)) + " books saved to books.csv")
+	print("Have a nice day :)")
 
-
+#entry of program
 def main():
 	print ("Reading List 1.0 - by %s" % "Wei Siyuan")
 	bookList = loadBook()
